@@ -24,6 +24,26 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage: storage });
 
+/**
+ * @swagger
+ * /api/doctors:
+ *   get:
+ *     summary: Get all doctors
+ *     tags: [Doctors]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of all doctors
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *       401:
+ *         description: Unauthorized
+ */
 const getDoctors = async (req, res) => {
   const doctors = await DocModel.find({})
     .select('-password -refreshToken -resetPasswordOTP -resetPasswordOTPExpires')
@@ -31,7 +51,31 @@ const getDoctors = async (req, res) => {
   res.status(200).json(doctors);
 };
 
-
+/**
+ * @swagger
+ * /api/doctors/{id}:
+ *   get:
+ *     summary: Get a doctor by ID
+ *     tags: [Doctors]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The doctor ID
+ *     responses:
+ *       200:
+ *         description: Doctor found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *       404:
+ *         description: Doctor not found or invalid ID
+ */
 const getDoctor = async (req, res) => {
   const { id } = req.params;
 
