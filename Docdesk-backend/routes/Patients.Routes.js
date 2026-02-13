@@ -10,20 +10,21 @@ const {
   removeDocAccess,
   upload,
 } = require("../controllers/Patient.Controller");
+const verifyRoles = require("../middleware/verifyRoles");
 
 const router = express.Router();
 
 // Get all patients
-router.get("/", getPatients);
+router.get("/", verifyRoles("admin", "doctor"), getPatients);
 
 // Get a patient
 router.get("/:id", getPatient);
 
 // Delete a patient
-router.delete("/:id", deletePatient);
+router.delete("/:id", verifyRoles("admin"), deletePatient);
 
 // update a patient
-router.put("/:id", updatePatient);
+router.put("/:id", verifyRoles("admin", "doctor", "patient"), updatePatient);
 
 // Give patient access to doctor
 router.patch("/addDocAccess/:id", addDocAccess);
@@ -34,6 +35,6 @@ router.patch("/removeDocAccess/:id", removeDocAccess);
 router.get("/accessDoctorList/:id/", getAccessDoctorList);
 
 // Upload profile image
-router.post("/:id", upload.single("image"), uploadProfileImage);
+router.post("/:id", verifyRoles("admin", "doctor", "patient"), upload.single("image"), uploadProfileImage);
 
 module.exports = router;
