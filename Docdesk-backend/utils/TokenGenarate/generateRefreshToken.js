@@ -14,9 +14,8 @@ const generateRefreshToken = async (payload) => {
   if (payload.roles === "doctor") {
     console.log("doctor");
     updatedUser = await Doctor.findOneAndUpdate(
-      { _id: payload._id }, 
-      { doctorId: payload._id},
-      { refreshToken: refreshToken },
+      { _id: payload._id },
+      { $set: { refreshToken: refreshToken, doctorId: payload._id } },
       { new: true }
     );
   }
@@ -24,23 +23,22 @@ const generateRefreshToken = async (payload) => {
   if (payload.roles === "patient") {
     console.log("patient");
     updatedUser = await Patient.findOneAndUpdate(
-      { _id: payload._id }, 
-      { patientId: payload._id},
-      { refreshToken: refreshToken },
+      { _id: payload._id },
+      { $set: { refreshToken: refreshToken, patientId: payload._id } },
       { new: true }
     );
   }
   if (payload.roles === "admin") {
     console.log("admin");
     updatedUser = await Admin.findOneAndUpdate(
-      { _id: payload._id }, 
-      { refreshToken: refreshToken },
+      { _id: payload._id },
+      { $set: { refreshToken: refreshToken } },
       { new: true }
     );
   }
 
 
-  
+
 
   return refreshToken;
 };
