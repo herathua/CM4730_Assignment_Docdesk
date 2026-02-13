@@ -2,6 +2,7 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const cors = require("cors");
 const express = require("express");
+const { swaggerUi, specs } = require("./swagger");
 
 // express app
 const app = express();
@@ -20,6 +21,9 @@ app.use((req, res, next) => {
   console.log(req.path, req.method);
   next();
 });
+
+// Swagger documentation route
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 // routes
 const RoutesIndex = require("./routes/routesIndex");

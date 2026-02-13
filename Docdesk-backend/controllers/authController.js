@@ -45,6 +45,44 @@ const userSignUp = async (req, res) => {
   }
 };
 
+/**
+ * @swagger
+ * /api/auth/signin:
+ *   post:
+ *     summary: Patient login
+ *     tags: [Auth - Patient]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: alice.williams@email.com
+ *               password:
+ *                 type: string
+ *                 example: password123
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 accessToken:
+ *                   type: string
+ *                 refreshToken:
+ *                   type: string
+ *       400:
+ *         description: Invalid credentials or user not verified
+ */
+
 const userSignIn = async (req, res) => {
   console.log(req.body);
 
@@ -131,6 +169,45 @@ const doctorSignUp = async (req, res) => {
 };
 
 
+/**
+ * @swagger
+ * /api/auth/doctor/signin:
+ *   post:
+ *     summary: Doctor login
+ *     tags: [Auth - Doctor]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: john.smith@docdesk.com
+ *               password:
+ *                 type: string
+ *                 example: password123
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 accessToken:
+ *                   type: string
+ *                 refreshToken:
+ *                   type: string
+ *                 medicalId:
+ *                   type: boolean
+ *       400:
+ *         description: Invalid credentials or medical ID not verified
+ */
 const doctorSignIn = async (req, res) => {
   const { email, password } = req.body;
 
