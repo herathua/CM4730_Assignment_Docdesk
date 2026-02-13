@@ -17,21 +17,21 @@ const refreshAccessToken = async (refreshToken) => {
 
     if (decoded.roles === "doctor") {
       const Doctor = await DoctorModel.findOne({ _id: decoded._id });
-      if (!Doctor) {
-        throw new Error("Invalid refresh token, Cannot find related Doctor");
+      if (!Doctor || Doctor.refreshToken !== refreshToken) {
+        throw new Error("Invalid or revoked refresh token");
       }
     }
     if (decoded.roles === "patient") {
       const Patient = await PatientModel.findOne({ _id: decoded._id });
-      if (!Patient) {
-        throw new Error("Invalid refresh token, Cannot find related Patient");
+      if (!Patient || Patient.refreshToken !== refreshToken) {
+        throw new Error("Invalid or revoked refresh token");
       }
     }
     if (decoded.roles === "admin") {
       const Admin = await AdminModel.findOne({ _id: decoded._id });
       console.log("Admin", Admin);
-      if (!Admin) {
-        throw new Error("Invalid refresh token, Cannot find related Admin");
+      if (!Admin || Admin.refreshToken !== refreshToken) {
+        throw new Error("Invalid or revoked refresh token");
       }
     }
 
