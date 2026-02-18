@@ -4,7 +4,7 @@ require("../models/Patient");
 const Patient = mongoose.model("Patient");
 const Doctor = mongoose.model("Doctor");
 
-const nodemailer = require("nodemailer");
+const transporter = require("../utils/emailConfig");
 
 const {
   generateRefreshToken,
@@ -36,7 +36,7 @@ const userSignUp = async (req, res) => {
   try {
     const user = new Patient({ firstName, lastName, nic, email, password });
     await user.save();
-  
+
     console.log("Patient Signup Success");
     res.status(200).send();
   } catch (err) {
@@ -44,6 +44,44 @@ const userSignUp = async (req, res) => {
     return res.status(400).send(err.message);
   }
 };
+
+/**
+ * @swagger
+ * /api/auth/signin:
+ *   post:
+ *     summary: Patient login
+ *     tags: [Auth - Patient]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: alice.williams@email.com
+ *               password:
+ *                 type: string
+ *                 example: password123
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 accessToken:
+ *                   type: string
+ *                 refreshToken:
+ *                   type: string
+ *       400:
+ *         description: Invalid credentials or user not verified
+ */
 
 const userSignIn = async (req, res) => {
   console.log(req.body);
@@ -131,6 +169,45 @@ const doctorSignUp = async (req, res) => {
 };
 
 
+/**
+ * @swagger
+ * /api/auth/doctor/signin:
+ *   post:
+ *     summary: Doctor login
+ *     tags: [Auth - Doctor]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: john.smith@docdesk.com
+ *               password:
+ *                 type: string
+ *                 example: password123
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 accessToken:
+ *                   type: string
+ *                 refreshToken:
+ *                   type: string
+ *                 medicalId:
+ *                   type: boolean
+ *       400:
+ *         description: Invalid credentials or medical ID not verified
+ */
 const doctorSignIn = async (req, res) => {
   const { email, password } = req.body;
 
@@ -230,13 +307,7 @@ const forgotPassword = async (req, res) => {
     await user.save();
 
     // Send the OTP via email
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: "haritharashmikanawarathna@gmail.com",
-        pass: "jupy bhwr lygn yvfe",
-      },
-    });
+
 
     console.log("email:", user.email);
 
@@ -407,13 +478,7 @@ const resendOTP = async (req, res) => {
     await user.save();
 
     // Send the OTP via email
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: "haritharashmikanawarathna@gmail.com",
-        pass: "jupy bhwr lygn yvfe",
-      },
-    });
+
 
     const mailOptions = {
       from: '"DocDesk Support" <support@docdesk.com>',
@@ -428,7 +493,7 @@ const resendOTP = async (req, res) => {
       `,
     };
 
-    
+
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
@@ -464,17 +529,7 @@ const getOTP = async (req, res) => {
     await user.save();
 
     // Send the OTP via email
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        // user: "manushadananjaya999@gmail.com",
-        // pass: "tums mfyz lncy tmhk",
 
-        user: "haritharashmikanawarathna@gmail.com",
-        pass: "jupy bhwr lygn yvfe",
-
-      },
-    });
 
     const mailOptions = {
       from: '"DocDesk Support" <support@docdesk.com>',
