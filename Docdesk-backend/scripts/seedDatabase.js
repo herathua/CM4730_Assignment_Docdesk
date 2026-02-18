@@ -1,6 +1,6 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 // Import all models
 const Doctor = require('../models/doctor');
@@ -105,7 +105,7 @@ const seedDatabase = async () => {
     console.log('Created doctors');
 
     // Create Patients
-   // ...existing code...
+    // ...existing code...
 
     // Create Patients
     const patients = await Patient.insertMany([
@@ -178,7 +178,7 @@ const seedDatabase = async () => {
     ]);
     console.log('Created patients');
 
-// ...existing code...
+    // ...existing code...
 
     // Create Medications
     // ...existing code...

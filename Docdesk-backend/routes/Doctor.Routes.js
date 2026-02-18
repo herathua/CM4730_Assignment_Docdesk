@@ -21,7 +21,7 @@ const router = express.Router();
 router.get("/", verifyRoles("admin", "doctor"), getDoctors);
 
 // Get a doctor
-router.get("/:id", getDoctor);
+router.get("/:id", verifyRoles("admin", "doctor", "patient"), getDoctor);
 
 // Delete a doctor
 router.delete("/:id", verifyRoles("admin"), deleteDoctor);
@@ -30,7 +30,7 @@ router.delete("/:id", verifyRoles("admin"), deleteDoctor);
 router.put("/:id", verifyRoles("admin", "doctor"), updateDoctor);
 
 // Add patient access to doctor
-router.patch("/addPatientAccess/:id", addPatientAccess);
+router.patch("/addPatientAccess/:id", verifyRoles("admin", "doctor"), addPatientAccess);
 
 // Verify a doctor
 router.patch("/verifyDoctor/:id", verifyRoles("admin"), verifyDoctor);
@@ -39,7 +39,7 @@ router.patch("/verifyDoctor/:id", verifyRoles("admin"), verifyDoctor);
 router.post("/:id", verifyRoles("admin", "doctor"), upload.single('image'), uploadProfileImage);
 
 // Get patients with access
-router.get("/getPatientsWithAccess/:id", getPatientsWithAccess);
+router.get("/getPatientsWithAccess/:id", verifyRoles("admin", "doctor"), getPatientsWithAccess);
 
 // Give patient access to doctor
 router.patch("/removeDocAccess/:id", verifyRoles("admin", "doctor"), removeAccessOfPatient);

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 
 const doctorSchema = new mongoose.Schema({
@@ -45,10 +45,10 @@ const doctorSchema = new mongoose.Schema({
     default: "doctor",
   },
   specialization: {
-    type:String,
+    type: String,
     default: "General"
   },
-  accessPatients:[
+  accessPatients: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Patient",
@@ -60,10 +60,10 @@ const doctorSchema = new mongoose.Schema({
   resetPasswordOTPExpires: {
     type: Date,
   },
-  gender:{
+  gender: {
     type: String,
   },
-  mobileNumber:{
+  mobileNumber: {
     type: String,
 
   },
